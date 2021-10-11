@@ -63,8 +63,8 @@ public protocol PersistenceIntegration: Integration {
     /// There is no guarantee which thread this will be called from, so it is your responsibility when implementing
     /// this method, to execute on whatever thread your local datastore may require operations to be executed on.
     ///
-    /// - Parameter syncToken: The string sync token that should be cached to that subsequent sync's pickup at the right spot.
-    func update(syncToken: String)
+    /// - Parameter syncSpace: The sync space that should be cached to that subsequent sync's pickup at the right spot.
+    func update(syncSpace: SyncSpace)
 
     ///  This method is called after all `Entry`s have been created and all links have been resolved.
     ///  The implementation should map `Entry` fields that are `Link`s to persistent relationships in
