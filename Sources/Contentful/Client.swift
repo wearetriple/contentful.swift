@@ -26,6 +26,9 @@ open class Client {
 
     /// Available Locales for this environment
     public var locales: [Contentful.Locale]?
+    
+    public var isFetchingLocales: Bool = false
+    public var localesCompletionHandlers: [ResultsHandler<Array<Contentful.Locale>>] = []
 
     /// Context for holding information about the fallback chain of locales for the Space.
     public private(set) var localizationContext: LocalizationContext! {
@@ -358,6 +361,8 @@ open class Client {
 
                 let localeCodes = locales.map { $0.code }
                 self.persistenceIntegration?.update(localeCodes: localeCodes)
+                
+                self.isFetchingLocales = false
 
                 guard let localizationContext = LocalizationContext(locales: locales) else {
                     let error = SDKError.localeHandlingError(message: "Locale with default == true not found in Environment!")
@@ -381,9 +386,18 @@ open class Client {
             completion(Result.success(locales))
             return nil
         }
-        return fetchCurrentSpaceLocales { result in
+        
+        guard !isFetchingLocales else {
+            localesCompletionHandlers.append(completion)
+            return nil
+        }
+        isFetchingLocales = true
+        
+        return fetchCurrentSpaceLocales { [weak self] result in
             switch result {
             case .success(let localesResponse):
+                self?.localesCompletionHandlers.forEach({ $0(.success(localesResponse.items)) })
+                self?.localesCompletionHandlers.removeAll()
                 completion(Result.success(localesResponse.items))
             case .failure(let error):
                 completion(.failure(error))
