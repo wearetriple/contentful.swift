@@ -82,6 +82,9 @@ public final class SyncSpace: Decodable {
 
     /// A token which needs to be present to perform a subsequent synchronization operation
     internal(set) public var syncToken = ""
+    
+    /// An identifier used for unique syncToken per content type
+    internal(set) public var contentTypeId: String = ""
 
     /// Number of entities per page in a sync operation. See documentation for details.
     internal(set) public var limit: Int?
@@ -99,10 +102,11 @@ public final class SyncSpace: Decodable {
     /// The sync token from a previous synchronization
     ///
     /// - Parameter syncToken: The sync token from a previous synchronization.
-    public init(syncToken: String = "", limit: Int? = nil) {
+    public init(syncToken: String = "", limit: Int? = nil, contentTypeId: String = "") {
         self.hasMorePages = false
         self.syncToken = syncToken
         self.limit = limit
+        self.contentTypeId = contentTypeId
     }
 
     internal static func syncToken(from urlString: String) -> String {
@@ -191,6 +195,9 @@ public final class SyncSpace: Decodable {
 
         syncToken = syncSpace.syncToken
         hasMorePages = syncSpace.hasMorePages
+        
+        // Store type id
+        syncSpace.contentTypeId = contentTypeId
     }
 
     internal func cache(resources: [Resource]) {
