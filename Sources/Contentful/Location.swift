@@ -11,7 +11,9 @@ import Foundation
 /// Small class to store location coordinates. This is used in preferences over CoreLocation types to avoid
 /// extra linking requirements for the SDK.
 @objc
-public class Location: NSObject, Decodable, NSCoding {
+public class Location: NSObject, Decodable, NSCoding, NSSecureCoding {
+    
+    public static var supportsSecureCoding: Bool = true
 
     /// The latitude of this location coordinate.
     public let latitude: Double
