@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-require 'dotenv/load'
+#require 'dotenv/load'
 
 Pod::Spec.new do |spec|
   spec.name             = "Contentful"
