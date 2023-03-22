@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |spec|
   spec.name             = "Contentful"
-  spec.version          = ENV['CONTENTFUL_SDK_VERSION']
+  spec.version          = "5.5.1"
   spec.summary          = "Swift SDK for Contentful's Content Delivery API."
   spec.homepage         = "https://github.com/contentful/contentful.swift/"
   spec.social_media_url = 'https://twitter.com/contentful'
